@@ -1,0 +1,13 @@
+#tbreak 16
+alias pi print(f'{to_ask=}');print(f'{i=}');print(f'{to_ask=}')
+alias nl next;;list
+alias di display to_ask;; display i;; display 
+
+#continue
+
+display print(f'{i=}')
+#display print(f'{name=}')
+#display print(f'{neigh=}')
+#display print(f'{to_ask=}')
+display print(f'{name=}  {to_ask=}  {neigh=}')
+
