@@ -1,0 +1,16 @@
+// inspiration: https://graphs.grevian.org/example
+digraph dijkstra {
+  rankdir=LR;
+  //layout=sfdp;
+  //layout=neato;
+  //layout=fdp;
+  nodesep=2;
+  ranksep=2;
+  START -> B[label="2"];
+  B -> A [label="3"];
+  START -> A [label="6"];
+  B -> FIN [label="5"];
+  A -> FIN [label="1"];
+
+  {rank=same; B,A}
+}
