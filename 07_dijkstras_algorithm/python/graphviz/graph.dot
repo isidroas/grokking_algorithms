@@ -7,7 +7,7 @@ digraph dijkstra {
   nodesep=2;
   ranksep=2;
   START -> B[label="2"];
-  B -> A [label="3"];
+  A -> B [label="3", dir="back"]; //https://stackoverflow.com/questions/1510784/right-to-left-edges-in-dot-graphviz
   START -> A [label="6"];
   B -> FIN [label="5"];
   A -> FIN [label="1"];
