@@ -8,9 +8,7 @@ from typing import Dict
 from tabulate import tabulate
 
 LOG = logging.getLogger(__name__)
-
 LOG.setLevel(logging.DEBUG)
-# logging.setLevel(logging.DEBUG)
 
 
 @dataclass
@@ -88,11 +86,12 @@ def dijkstra(graph, init):
 @pytest.fixture
 def graph():
     return {
-    "START": {"A": 6, "B": 2},
-    "A": {"FIN": 1},
-    "B": {"FIN": 5, "A": 3},
-    "FIN": {},
-}
+        "START": {"A": 6, "B": 2},
+        "A": {"FIN": 1},
+        "B": {"FIN": 5, "A": 3},
+        "FIN": {},
+    }
+
 
 def test(graph):
     assert dijkstra(graph, "START") == {
