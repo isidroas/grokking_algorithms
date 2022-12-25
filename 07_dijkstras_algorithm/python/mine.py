@@ -1,17 +1,11 @@
-from pprint import pprint, pformat
-from dataclasses import dataclass
-from typing import Dict
-from tabulate import tabulate
-
-graph = {
-    "START": {"A": 6, "B": 2},
-    "A": {"FIN": 1},
-    "B": {"FIN": 5, "A": 3},
-    "FIN": {},
-}
-from logging import Logger
 import logging
 import math
+from dataclasses import dataclass
+from logging import Logger
+from pprint import pformat, pprint
+from typing import Dict
+
+from tabulate import tabulate
 
 LOG = logging.getLogger(__name__)
 
@@ -91,7 +85,16 @@ def dijkstra(graph, init):
     return {n.name: n.cost for n in state.values()}
 
 
-def test():
+@pytest.fixture
+def graph():
+    return {
+    "START": {"A": 6, "B": 2},
+    "A": {"FIN": 1},
+    "B": {"FIN": 5, "A": 3},
+    "FIN": {},
+}
+
+def test(graph):
     assert dijkstra(graph, "START") == {
         "START": 0,
         "B": 2,
@@ -102,7 +105,7 @@ def test():
     # TODO: test cycles
 
 
-def test_path():
+def test_path(graph):
     assert dijkstra2(graph, "START") == {
         "B": "START",
         "A": "B",
