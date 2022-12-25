@@ -1,4 +1,4 @@
-from pprint import pprint
+from pprint import pprint, pformat
 from dataclasses import dataclass
 from typing import Dict
 graph = {
@@ -7,6 +7,12 @@ graph = {
     "B": {"FIN": 5, "A": 3},
     "FIN": {},
 }
+from logging import Logger
+import logging
+LOG = logging.getLogger(__name__)
+
+LOG.setLevel(logging.DEBUG)
+#logging.setLevel(logging.DEBUG)
 
 @dataclass
 class Node:
@@ -39,7 +45,6 @@ def _dijkstra(graph, init):
             break
 
 
-
         for neigh_name, cost in graph[node.name].items():
             neigh = state[neigh_name]
 
@@ -51,7 +56,13 @@ def _dijkstra(graph, init):
                 neigh.parent = node.name
 
         node.seen = True
-        #pprint(list(state.values()))
+
+        if LOG.isEnabledFor(logging.DEBUG):
+            from textwrap import indent
+            no_indented = pformat(list(state.values()))
+            indented = indent(no_indented,'\t\t')
+            LOG.debug('node=%s, state=\n%s', node.name, indented)
+
 
     #pprint(graph)
     #pprint(state)
