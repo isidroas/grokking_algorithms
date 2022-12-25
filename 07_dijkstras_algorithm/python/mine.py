@@ -5,7 +5,8 @@ from logging import Logger
 from pprint import pformat, pprint
 from typing import Dict
 
-from tabulate import tabulate
+import pytest
+
 
 LOG = logging.getLogger(__name__)
 LOG.setLevel(logging.DEBUG)
@@ -21,6 +22,7 @@ class Node:
 
 def _debug_state(node, state, table=True):
     if table:
+        from tabulate import tabulate
         rows = ((row.name, row.seen, row.cost, row.parent) for row in state.values())
         headers = ("name", "seen", "cost", "parent")
         # table = tabulate(rows, headers=headers, tablefmt='grid')
