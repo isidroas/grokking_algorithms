@@ -5,9 +5,6 @@ from logging import Logger
 from pprint import pformat, pprint
 from typing import Dict
 
-import pytest
-
-
 LOG = logging.getLogger(__name__)
 LOG.setLevel(logging.DEBUG)
 
@@ -20,21 +17,6 @@ class Node:
     parent: str = None
 
 
-def _debug_state(node, state, table=True):
-    if table:
-        from tabulate import tabulate
-        rows = ((row.name, row.seen, row.cost, row.parent) for row in state.values())
-        headers = ("name", "seen", "cost", "parent")
-        # table = tabulate(rows, headers=headers, tablefmt='grid')
-        table = tabulate(rows, tablefmt="simple_grid")
-        no_indented = table
-    else:
-        no_indented = pformat(list(state.values()))
-
-    from textwrap import indent
-
-    indented = indent(no_indented, "\t\t")
-    LOG.debug("node=%s, state=\n%s", node.name, indented)
 
 
 def _search_lower_cost(state):
@@ -66,7 +48,7 @@ def _dijkstra(graph, init):
             total_cost = node.cost + cost
 
             if neigh.cost > total_cost:
-                assert not neigh.seen, "something went wrong"
+                assert not neigh.seen, "search_lower_cost didn't do its job well"
                 neigh.cost = total_cost
                 neigh.parent = node.name
 
@@ -85,30 +67,20 @@ def dijkstra(graph, init):
     return {n.name: n.cost for n in state.values()}
 
 
-@pytest.fixture
-def graph():
-    return {
-        "START": {"A": 6, "B": 2},
-        "A": {"FIN": 1},
-        "B": {"FIN": 5, "A": 3},
-        "FIN": {},
-    }
 
+def _debug_state(node, state, table=True):
+    if table:
+        from tabulate import tabulate
 
-def test(graph):
-    assert dijkstra(graph, "START") == {
-        "START": 0,
-        "B": 2,
-        "A": 5,
-        "FIN": 6,
-    }
+        rows = ((row.name, row.seen, row.cost, row.parent) for row in state.values())
+        headers = ("name", "seen", "cost", "parent")
+        # table = tabulate(rows, headers=headers, tablefmt='grid')
+        table = tabulate(rows, tablefmt="simple_grid")
+        no_indented = table
+    else:
+        no_indented = pformat(list(state.values()))
 
-    # TODO: test cycles
+    from textwrap import indent
 
-
-def test_path(graph):
-    assert dijkstra2(graph, "START") == {
-        "B": "START",
-        "A": "B",
-        "FIN": "A",
-    }
+    indented = indent(no_indented, "\t\t")
+    LOG.debug("node=%s, state=\n%s", node.name, indented)
