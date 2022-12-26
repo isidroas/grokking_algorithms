@@ -34,9 +34,20 @@ def test_not_rechable():
     dijkstra({"START": {},"FIN": {}, "A": {}}, "START")
 
 
-def test_path(graph):
-    assert dijkstra2(graph, "START") == {
-        "B": "START",
-        "A": "B",
-        "FIN": "A",
-    }
+#def test_path(graph):
+#    assert dijkstra2(graph, "START") == {
+#        "B": "START",
+#        "A": "B",
+#        "FIN": "A",
+#    }
+
+def test_shortest_path_tree(graph):
+    expected = {"START":["B"],
+                "B":["A"],
+                "A":["FIN"],
+                "FIN":[]}
+    assert shortest_path_tree(graph, "START") == expected
+
+#def test_shortest_path(graph):
+#    shortest_path(graph, "START","FIN") == ["START", "B", "A", "FIN"]
+#    shortest_path(graph, "START","A") == ["START", "B", "A"]

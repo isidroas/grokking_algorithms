@@ -12,8 +12,14 @@ LOG.setLevel(logging.DEBUG)
 @dataclass
 class Node:
     name: str
+
+    # Already seen. The cost indicated shoul be definitive
     seen: bool = False
-    cost: int = math.inf  # or -1 for inf
+
+    # Cost from initial node
+    cost: int = math.inf
+
+    # Parent of the path used to calculate cost
     parent: str = None
 
 
@@ -66,7 +72,25 @@ def dijkstra(graph, init):
     state = _dijkstra(graph, init)
     return {n.name: n.cost for n in state.values()}
 
+def shortest_path_tree(graph,init):
+    state = _dijkstra(graph, init)
 
+    tree = {} # Dict[parent: childs]
+    for node in state.values():
+        # get childs
+        tree[node.name]= [n.name for n in state.values() if n.parent == node.name]
+    return tree
+
+def shortest_path(graph,init, final):
+    state = _dijkstra(graph, init)
+
+    res =[]
+    node = state[init]
+    res.append(node.name)
+    while node.name != init:
+        node = state[node.parent]
+        res.append(node.name)
+    return res
 
 def _debug_state(node, state, table=True):
     if table:
