@@ -22,20 +22,18 @@ class Node:
     # Parent of the path used to calculate cost
     parent: str = None
 
-
+# TODO: create Table class. To avoid Dict[name, Node] ?
+#    or NodeCollection
 
 
 def _search_lower_cost(state):
     node = None
     for n in state.values():
-        if n.seen or n.cost is None:
+
+        if n.seen:
             continue
 
-        if node is None:
-            node = n
-            continue
-
-        if n.cost < node.cost:
+        if node is None or n.cost < node.cost:
             node = n
 
     return node
