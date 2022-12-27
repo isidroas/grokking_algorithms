@@ -1,9 +1,17 @@
+"""
+This code is intended to be similar to the human way of doing the
+algorithim. The best way to learn is to take a paper and draw a table in wich
+each row is a node.
+
+The computational speed is less priorized
+"""
 import logging
 import math
+import collections
 from dataclasses import dataclass
 from logging import Logger
 from pprint import pformat, pprint
-from typing import Dict
+from typing import Dict, List
 
 LOG = logging.getLogger(__name__)
 LOG.setLevel(logging.DEBUG)
@@ -24,11 +32,52 @@ class Node:
 
 # TODO: create Table class. To avoid Dict[name, Node] ?
 #    or NodeCollection
+#  doctest in methods. Example graph as global
+#  or use a List[Node] and create the function get_by_name?
+
+# Graph example
+#G = {
+#    "START": {"A": 6, "B": 2},
+#    "A": {"FIN": 1},
+#    "B": {"FIN": 5, "A": 3},
+#    "FIN": {},
+#}
+
+class Table(collections.UserList):
+    def __getitem__(self, name): # dictionary syntax
+        """
+        >>> _get_by_name(
+        ...   [Node("A"), Node("B")],
+        ...   "B",
+        ... )
+        Node("B")
+        """
+        if isinstance(name,int):
+            return self.data[name]
+
+        for node in self.data:
+            if node.name == name:
+                return node
+        raise KeyError(f'Node {name} not in {self}')
+
+    def __str__(self):
+        return pformat(self.data)
 
 
-def _search_lower_cost(state):
+
+def _search_lower_cost(table):
+    """
+    >>> table = [
+    ...             Node("A", seen = True,  cost = 1),
+    ...             Node("B", seen = False, cost = 3),
+    ...             Node("C", seen = False, cost = 2),
+    ... ]
+    >>> _search_lower_cost(table)
+    Node("C", seen = False, cost = 2)
+    """
+    # TODO: put more doctest
     node = None
-    for n in state.values():
+    for n in table:
 
         if n.seen:
             continue
@@ -40,14 +89,14 @@ def _search_lower_cost(state):
 
 
 def _dijkstra(graph, init):
-    state: Dict[str, Node] = {k: Node(k) for k in graph}
-    state[init].cost = 0
+    table = Table(Node(k) for k in graph)
+    table[init].cost = 0
 
-    node = _search_lower_cost(state)
+    node = _search_lower_cost(table)
     while node is not None:
 
         for neigh_name, cost in graph[node.name].items():
-            neigh = state[neigh_name]
+            neigh = table[neigh_name]
 
             total_cost = node.cost + cost
 
@@ -59,24 +108,24 @@ def _dijkstra(graph, init):
         node.seen = True
 
         if LOG.isEnabledFor(logging.DEBUG):
-            _debug_state(node, state)
+            _debug_state(node, table)
 
-        node = _search_lower_cost(state)
+        node = _search_lower_cost(table)
 
-    return state
+    return table
 
 
 def dijkstra(graph, init):
     state = _dijkstra(graph, init)
-    return {n.name: n.cost for n in state.values()}
+    return {n.name: n.cost for n in state}
 
 def shortest_path_tree(graph,init):
     state = _dijkstra(graph, init)
 
     tree = {} # Dict[parent: childs]
-    for node in state.values():
+    for node in state:
         # get childs
-        tree[node.name]= [n.name for n in state.values() if n.parent == node.name]
+        tree[node.name]= [n.name for n in state if n.parent == node.name]
     return tree
 
 def shortest_path(graph,init, final):
@@ -94,13 +143,13 @@ def _debug_state(node, state, table=True):
     if table:
         from tabulate import tabulate
 
-        rows = ((row.name, row.seen, row.cost, row.parent) for row in state.values())
+        rows = ((row.name, row.seen, row.cost, row.parent) for row in state)
         headers = ("name", "seen", "cost", "parent")
         # table = tabulate(rows, headers=headers, tablefmt='grid')
         table = tabulate(rows, tablefmt="simple_grid")
         no_indented = table
     else:
-        no_indented = pformat(list(state.values()))
+        no_indented = str(state)
 
     from textwrap import indent
 
