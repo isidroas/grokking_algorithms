@@ -55,6 +55,7 @@ class Table(collections.UserList):
         if isinstance(name,int):
             return self.data[name]
 
+    def get(self,name):
         for node in self.data:
             if node.name == name:
                 return node
@@ -90,13 +91,13 @@ def _search_lower_cost(table):
 
 def _dijkstra(graph, init):
     table = Table(Node(k) for k in graph)
-    table[init].cost = 0
+    table.get(init).cost = 0
 
     node = _search_lower_cost(table)
     while node is not None:
 
         for neigh_name, cost in graph[node.name].items():
-            neigh = table[neigh_name]
+            neigh = table.get(neigh_name)
 
             total_cost = node.cost + cost
 
@@ -132,10 +133,10 @@ def shortest_path(graph,init, final):
     table = _dijkstra(graph, init)
 
     res =[]
-    node = table[init]
+    node = table.get(init)
     res.append(node.name)
     while node.name != init:
-        node = table[node.parent]
+        node = table.get(node.parent)
         res.append(node.name)
     return res
 
