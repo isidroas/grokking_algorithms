@@ -108,7 +108,7 @@ def _dijkstra(graph, init):
         node.seen = True
 
         if LOG.isEnabledFor(logging.DEBUG):
-            _debug_state(node, table)
+            _debug_table(node, table)
 
         node = _search_lower_cost(table)
 
@@ -116,42 +116,42 @@ def _dijkstra(graph, init):
 
 
 def dijkstra(graph, init):
-    state = _dijkstra(graph, init)
-    return {n.name: n.cost for n in state}
+    table = _dijkstra(graph, init)
+    return {n.name: n.cost for n in table}
 
 def shortest_path_tree(graph,init):
-    state = _dijkstra(graph, init)
+    table = _dijkstra(graph, init)
 
     tree = {} # Dict[parent: childs]
-    for node in state:
+    for node in table:
         # get childs
-        tree[node.name]= [n.name for n in state if n.parent == node.name]
+        tree[node.name]= [n.name for n in table if n.parent == node.name]
     return tree
 
 def shortest_path(graph,init, final):
-    state = _dijkstra(graph, init)
+    table = _dijkstra(graph, init)
 
     res =[]
-    node = state[init]
+    node = table[init]
     res.append(node.name)
     while node.name != init:
-        node = state[node.parent]
+        node = table[node.parent]
         res.append(node.name)
     return res
 
-def _debug_state(node, state, table=True):
-    if table:
+def _debug_table(node, table, tabular=True):
+    if tabular:
         from tabulate import tabulate
 
-        rows = ((row.name, row.seen, row.cost, row.parent) for row in state)
+        rows = ((row.name, row.seen, row.cost, row.parent) for row in table)
         headers = ("name", "seen", "cost", "parent")
         # table = tabulate(rows, headers=headers, tablefmt='grid')
         table = tabulate(rows, tablefmt="simple_grid")
         no_indented = table
     else:
-        no_indented = str(state)
+        no_indented = str(table)
 
     from textwrap import indent
 
     indented = indent(no_indented, "\t\t")
-    LOG.debug("node=%s, state=\n%s", node.name, indented)
+    LOG.debug("node=%s, table=\n%s", node.name, indented)
