@@ -44,18 +44,14 @@ class Node:
 #}
 
 class Table(collections.UserList):
-    def __getitem__(self, name): # dictionary syntax
+    def get(self,name):
         """
-        >>> _get_by_name(
-        ...   [Node("A"), Node("B")],
-        ...   "B",
-        ... )
+        >>> Table([
+        ...         Node("A"),
+        ...         Node("B"),
+        ...       ]).get("B")
         Node("B")
         """
-        if isinstance(name,int):
-            return self.data[name]
-
-    def get(self,name):
         for node in self.data:
             if node.name == name:
                 return node
@@ -63,6 +59,13 @@ class Table(collections.UserList):
 
     def __str__(self):
         return pformat(self.data)
+
+    def format_table(self,headers = False, style='simple_grid'):
+        from tabulate import tabulate
+        rows = ((row.name, row.seen, row.cost, row.parent) for row in self)
+        headers = ("name", "seen", "cost", "parent") if headers else []
+        return tabulate(rows, headers=headers, tablefmt='grid')
+        #return tabulate(rows, tablefmt="simple_grid")
 
 
 
@@ -142,13 +145,8 @@ def shortest_path(graph,init, final):
 
 def _debug_table(node, table, tabular=True):
     if tabular:
-        from tabulate import tabulate
 
-        rows = ((row.name, row.seen, row.cost, row.parent) for row in table)
-        headers = ("name", "seen", "cost", "parent")
-        # table = tabulate(rows, headers=headers, tablefmt='grid')
-        table = tabulate(rows, tablefmt="simple_grid")
-        no_indented = table
+        no_indented = table.format_table()
     else:
         no_indented = str(table)
 
