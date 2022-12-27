@@ -30,21 +30,23 @@ class Node:
     # Parent of the path used to calculate cost
     parent: str = None
 
+
 # TODO: create Table class. To avoid Dict[name, Node] ?
 #    or NodeCollection
 #  doctest in methods. Example graph as global
 #  or use a List[Node] and create the function get_by_name?
 
 # Graph example
-#G = {
+# G = {
 #    "START": {"A": 6, "B": 2},
 #    "A": {"FIN": 1},
 #    "B": {"FIN": 5, "A": 3},
 #    "FIN": {},
-#}
+# }
+
 
 class Table(collections.UserList):
-    def get(self,name):
+    def get(self, name):
         """
         >>> Table([
         ...         Node("A"),
@@ -55,18 +57,17 @@ class Table(collections.UserList):
         for node in self.data:
             if node.name == name:
                 return node
-        raise KeyError(f'Node {name} not in {self}')
+        raise KeyError(f"Node {name} not in {self}")
 
     def __str__(self):
         return pformat(self.data)
 
-    def format_table(self,headers = False, style='simple_grid'):
+    def format_table(self, headers=False, style="grid"):
         from tabulate import tabulate
-        rows = ((row.name, row.seen, row.cost, row.parent) for row in self)
-        headers = ("name", "seen", "cost", "parent") if headers else []
-        return tabulate(rows, headers=headers, tablefmt='grid')
-        #return tabulate(rows, tablefmt="simple_grid")
 
+        rows = ((row.name, row.seen, row.cost, row.parent) for row in self)
+        headers = ("name", "seen", "cost", "parent") if headers else ()
+        return tabulate(rows, headers=headers, tablefmt="grid")
 
 
 def _search_lower_cost(table):
@@ -123,25 +124,28 @@ def dijkstra(graph, init):
     table = _dijkstra(graph, init)
     return {n.name: n.cost for n in table}
 
-def shortest_path_tree(graph,init):
+
+def shortest_path_tree(graph, init):
     table = _dijkstra(graph, init)
 
-    tree = {} # Dict[parent: childs]
+    tree = {}  # Dict[parent: childs]
     for node in table:
         # get childs
-        tree[node.name]= [n.name for n in table if n.parent == node.name]
+        tree[node.name] = [n.name for n in table if n.parent == node.name]
     return tree
 
-def shortest_path(graph,init, final):
+
+def shortest_path(graph, init, final):
     table = _dijkstra(graph, init)
 
-    res =[]
+    res = []
     node = table.get(init)
     res.append(node.name)
     while node.name != init:
         node = table.get(node.parent)
         res.append(node.name)
     return res
+
 
 def _debug_table(node, table, tabular=True):
     if tabular:
