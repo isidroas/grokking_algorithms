@@ -31,8 +31,6 @@ class Node:
     parent: str = None
 
 
-# TODO: create Table class. To avoid Dict[name, Node] ?
-#    or NodeCollection
 #  doctest in methods. Example graph as global
 #  or use a List[Node] and create the function get_by_name?
 
@@ -52,7 +50,7 @@ class Table(collections.UserList):
         ...         Node("A"),
         ...         Node("B"),
         ...       ]).get("B")
-        Node("B")
+        Node(name='B', seen=False, cost=inf, parent=None)
         """
         for node in self.data:
             if node.name == name:
@@ -78,9 +76,8 @@ def _search_lower_cost(table):
     ...             Node("C", seen = False, cost = 2),
     ... ]
     >>> _search_lower_cost(table)
-    Node("C", seen = False, cost = 2)
+    Node(name='C', seen=False, cost=2, parent=None)
     """
-    # TODO: put more doctest
     node = None
     for n in table:
 
@@ -148,13 +145,7 @@ def shortest_path(graph, init, final):
 
 
 def _debug_table(node, table, tabular=True):
-    if tabular:
-
-        no_indented = table.format_table()
-    else:
-        no_indented = str(table)
-
     from textwrap import indent
-
+    no_indented = table.format_table() if tabular else str(table)
     indented = indent(no_indented, "\t\t")
     LOG.debug("node=%s, table=\n%s", node.name, indented)
