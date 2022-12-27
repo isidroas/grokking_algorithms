@@ -21,7 +21,7 @@ LOG.setLevel(logging.DEBUG)
 class Node:
     name: str
 
-    # Already seen. The cost indicated shoul be definitive
+    # Already seen. The cost indicated should be definitive
     seen: bool = False
 
     # Cost from initial node
@@ -29,18 +29,6 @@ class Node:
 
     # Parent of the path used to calculate cost
     parent: str = None
-
-
-#  doctest in methods. Example graph as global
-#  or use a List[Node] and create the function get_by_name?
-
-# Graph example
-# G = {
-#    "START": {"A": 6, "B": 2},
-#    "A": {"FIN": 1},
-#    "B": {"FIN": 5, "A": 3},
-#    "FIN": {},
-# }
 
 
 class Table(collections.UserList):
@@ -90,7 +78,7 @@ def _search_lower_cost(table):
     return node
 
 
-def _dijkstra(graph, init):
+def _dijkstra(graph, init: str) -> Table:
     table = Table(Node(k) for k in graph)
     table.get(init).cost = 0
 
@@ -103,7 +91,7 @@ def _dijkstra(graph, init):
             total_cost = node.cost + cost
 
             if neigh.cost > total_cost:
-                assert not neigh.seen, "search_lower_cost didn't do its job well"
+                assert not neigh.seen, "_search_lower_cost didn't do its job right"
                 neigh.cost = total_cost
                 neigh.parent = node.name
 
