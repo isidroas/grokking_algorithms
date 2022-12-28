@@ -5,9 +5,9 @@ each row is a node.
 
 The computational speed is less priorized
 """
+import collections
 import logging
 import math
-import collections
 from dataclasses import dataclass
 from logging import Logger
 from pprint import pformat, pprint
