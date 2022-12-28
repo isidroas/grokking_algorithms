@@ -9,9 +9,7 @@ import collections
 import logging
 import math
 from dataclasses import dataclass
-from logging import Logger
-from pprint import pformat, pprint
-from typing import Dict, List
+from pprint import pformat
 
 LOG = logging.getLogger(__name__)
 LOG.setLevel(logging.DEBUG)
@@ -99,7 +97,6 @@ def _dijkstra(graph, init: str) -> Table:
 
         if LOG.isEnabledFor(logging.DEBUG):
             _debug_table(node, table)
-
 
     return table
 
