@@ -34,6 +34,7 @@ class Node:
 class Table(collections.UserList):
     def get(self, name):
         """
+        Search node by name
         >>> Table([
         ...         Node("A"),
         ...         Node("B"),
@@ -82,8 +83,7 @@ def _dijkstra(graph, init: str) -> Table:
     table = Table(Node(k) for k in graph)
     table.get(init).cost = 0
 
-    node = _search_lower_cost(table)
-    while node is not None:
+    while node := _search_lower_cost(table):
 
         for neigh_name, cost in graph[node.name].items():
             neigh = table.get(neigh_name)
@@ -100,7 +100,6 @@ def _dijkstra(graph, init: str) -> Table:
         if LOG.isEnabledFor(logging.DEBUG):
             _debug_table(node, table)
 
-        node = _search_lower_cost(table)
 
     return table
 
