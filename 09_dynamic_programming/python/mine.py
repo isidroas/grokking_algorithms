@@ -3,6 +3,21 @@ def longest_common_substring(str1, str2):
     max1 = (max(row) for row in grid)
     return max(max1)
 
+def longest_common_substring2(str1, str2):
+    grid = _grid(str1, str2)
+    max1 = 0
+    mrow = None
+    mcolumn = None
+    for row, char1 in enumerate(str1):
+        for column, char2 in enumerate(str2):
+            cel = grid[row][column]
+            if cel>=max1:
+                max1 = cel
+                mrow=row
+                mcolumn = column
+
+    return str1[mrow-max1+1:mrow+1]
+
 def _grid(str1, str2):
     """
     |   | s | t | r | 2 |
@@ -40,3 +55,4 @@ def test():
     ]
     #assert expected == _grid('fish', 'hish')
     assert 3 == longest_common_substring('fish', 'hish')
+    assert 'ish' == longest_common_substring2('fish', 'hish')
