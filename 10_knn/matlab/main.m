@@ -8,6 +8,7 @@ function foo = main()
 
     % showData(train_images, 100, 100);
     guesses(20, 3, train_images, train_labels, test_images, test_labels);
+    pause;
 end
 
 function foo = showData(images, rows, cols)
