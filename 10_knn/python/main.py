@@ -55,7 +55,15 @@ def classify(X_train, y_train, X_test, k=5)-> int:
     sort = _sort_dist(dist)
     classes = (x[1] for x in sort[:k])
     mode = _get_mode(classes)
-    return CLASSES[mode]
+    return mode
+
+def get_error(X_train, y_train, X_test, y_test, k=5):
+    corrects=0
+    for x, y_real in zip(X_test, y_test):
+        y_estimated = classify(X_train, y_train, x, k=k)
+        if y_real == y_estimated:
+            corrects +=1
+    return 1 - corrects/len(y_test)
 
 def test_distances():
     assert _distances(X_train = [(2,2),(1,4)],y_train=(0,1), X_test = (1,2)) == [(1,0), (2,1)]
@@ -69,7 +77,11 @@ def test_mode():
 
 def test_classify():
     y_test_estimated = classify(X_train, y_train, [4.4, 3.1, 1.3, 1.4], k=5)
-    assert y_test_estimated == 'setosa' # or 0
+    assert CLASSES[y_test_estimated] == 'setosa' # or 0
+
+def test_error():
+    error = get_error(X_train, y_train, X_test, y_test, k=5)
+    assert 0 <=error<=1
 
 
 
