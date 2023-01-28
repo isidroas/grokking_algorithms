@@ -29,13 +29,50 @@ def dist(p1, p2):
         res += (p1[i]-p2[i])**2
     return math.sqrt(res)
 
-def classify(X_train, y_train, X_test)-> int:
-    pass
+def _distances(X_train, y_train, X_test):
+    res =[]
+    for x, y in zip(X_train, y_train):
+        res.append((dist(x,X_test), y))
+    return res
+
+def _sort_dist(list_):
+    list_.sort(key=lambda x:x[0])
+    return list_
+
+def _get_mode(classes):
+    occurrences = {}
+    for c in classes:
+        if c in occurrences:
+            occurrences[c] +1
+        else:
+            occurrences[c]=1
+    res = max(occurrences.items, key=operator.itemgetter(1))
+    return res[1]
+
+def classify(X_train, y_train, X_test, k=5)-> int:
+    dist = _distances(X_train, y_train, X_test)
+    sort = _sort_dist(dist)
+    mode = _get_mode(sort[:k])
+    return mode
+
+def test_distances():
+    assert _distances(X_train = [(2,2),(1,4)],y_train=(0,1), X_test = (1,2)) == [(1,0), (2,1)]
+
+def test_sort():
+    assert _sort_dist([(2,0), (1,1)]) == [(1,1), (2,0)]
+
+def test_mode():
+    assert _get_mode([1,2,3,2,3,1,3]) == 3
+    assert _get_mode([1,1,2]) == 1
+
+def test_classify():
+    y_test_estimated = classify(X_train, y_train, [4.4, 3.1, 1.3, 1.4], k=5)
+    assert y_test_estimated == 'cetosa' # or 0
 
 if __name__=="__main__":
+    pass
+
     #y_test_estimated = classify(X_train, y_train, X_test, k=)
     #error = calculate_error_rate(y_test_estimated, y_test)
-    y_test_estimated = classify(X_train, y_train, [4.4, 3.1, 1.3, 1.4], k=5) == 'setosa'
-
 
 
