@@ -5,6 +5,7 @@ import numpy as np
 from sklearn import datasets
 from sklearn.model_selection import train_test_split
 import math
+import operator
 
 data = datasets.load_iris()
 
@@ -43,11 +44,11 @@ def _get_mode(classes):
     occurrences = {}
     for c in classes:
         if c in occurrences:
-            occurrences[c] +1
+            occurrences[c] +=1
         else:
             occurrences[c]=1
-    res = max(occurrences.items, key=operator.itemgetter(1))
-    return res[1]
+    res = max(occurrences.items(), key=operator.itemgetter(1))
+    return res[0]
 
 def classify(X_train, y_train, X_test, k=5)-> int:
     dist = _distances(X_train, y_train, X_test)
