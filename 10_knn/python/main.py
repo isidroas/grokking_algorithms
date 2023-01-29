@@ -6,6 +6,7 @@ from sklearn import datasets
 from sklearn.model_selection import train_test_split
 import math
 import operator
+from  collections import Counter
 
 data = datasets.load_iris()
 
@@ -42,15 +43,10 @@ def _sort_dist(list_):
     list_.sort(key=lambda x:x[0])
     return list_
 
+
 def _get_mode(classes):
-    occurrences = {}
-    for c in classes:
-        if c in occurrences:
-            occurrences[c] +=1
-        else:
-            occurrences[c]=1
-    res = max(occurrences.items(), key=operator.itemgetter(1))
-    return res[0]
+    c = Counter(classes)
+    return c.most_common(1)[0][0]
 
 def classify(X_train, y_train, X_test, k=5)-> int:
     dist = _distances(X_train, y_train, X_test)
