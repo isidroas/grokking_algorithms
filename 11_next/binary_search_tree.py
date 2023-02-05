@@ -19,6 +19,22 @@ def search(tree, node):
     if  node > tree.value:
         return False if tree.right is None else search(tree.right, node)
 
+def insert(tree,node):
+    if node < tree.value:
+        if tree.left is None:
+            tree.left = Node(node)
+            return
+        return insert(tree.left, node)
+
+    if node > tree.value:
+        if tree.right is None:
+            tree.right = Node(node)
+            return
+        return insert(tree.right, node)
+
+    if node == tree.value:
+        raise ValueError(f'node {node} already exists')
+
 
 def test_tree():
     # https://www.epdata.es/datos/nombres-apellidos-mas-frecuentes-espana-ine/373#:~:text=Antonio%20y%20Mar%C3%ADa%20Carmen%20siguen,son%20Antonio%2C%20Manuel%20y%20Jos%C3%A9.
@@ -50,5 +66,5 @@ def test_tree():
     assert search(root, "Javier") == True
     assert search(root, "Manolo") == False
 
-    #assert insert("Manolo")
-    #assert search("Manolo") == True
+    insert(root,"Manolo")
+    assert search(root,"Manolo") == True
