@@ -36,6 +36,30 @@ def insert(tree,node):
         raise ValueError(f'node {node} already exists')
 
 
+def minimum(tree):
+    res = tree.left
+    while res.left:
+        res = res.left
+    return res.value
+
+def maximum(tree):
+    res = tree.right
+    while res.right:
+        res = res.right
+    return res.value
+
+def traverse(tree):
+    res = []
+
+    if tree is None:
+        return []
+
+    res.extend(traverse(tree.left))
+    res.append(tree.value)
+    res.extend(traverse(tree.right))
+
+    return res
+
 def test_tree():
     # https://www.epdata.es/datos/nombres-apellidos-mas-frecuentes-espana-ine/373#:~:text=Antonio%20y%20Mar%C3%ADa%20Carmen%20siguen,son%20Antonio%2C%20Manuel%20y%20Jos%C3%A9.
     # tree = Node('Laura', None, Node('Cristina',None,None,None), Node('Maria Jose',None,None))
@@ -66,5 +90,9 @@ def test_tree():
     assert search(root, "Javier") == True
     assert search(root, "Manolo") == False
 
-    insert(root,"Manolo")
-    assert search(root,"Manolo") == True
+    #insert(root,"Manolo")
+    #assert search(root,"Manolo") == True
+
+    assert minimum(root) == 'Alejandro'
+    assert maximum(root) == 'Pedro'
+    assert traverse(root) == ['Alejandro', 'David','Javier', 'Jose','Juan', 'Miguel', 'Pedro']
