@@ -1,3 +1,7 @@
+"""
+TODO:
+- maintain parent attribute. I makes better the deletion
+"""
 from dataclasses import dataclass
 
 
@@ -113,6 +117,13 @@ def traverse(tree):
 
     return res
 
+def depth(root):
+    if root is None:
+        return 0
+    max_depth = 1 +max(depth(root.left), depth(root.right))
+    return max_depth
+    
+
 def test_tree():
     # https://www.epdata.es/datos/nombres-apellidos-mas-frecuentes-espana-ine/373#:~:text=Antonio%20y%20Mar%C3%ADa%20Carmen%20siguen,son%20Antonio%2C%20Manuel%20y%20Jos%C3%A9.
     # tree = Node('Laura', None, Node('Cristina',None,None,None), Node('Maria Jose',None,None))
@@ -122,6 +133,15 @@ def test_tree():
     #             ['David', 'Miguel'],
     # ['Alejandro', 'Javier', 'Juan', 'Pedro']
     #        ]
+    """
+               ┌ Alejandro
+      ┌─ David ┤
+      │        └─── Javier
+ Jose ┤
+      │        ┌───── Juan
+      └ Miguel ┤
+               └──── Pedro
+    """
     jose = Node("Jose")
     david = Node("David")
     miguel = Node("Miguel")
@@ -152,3 +172,4 @@ def test_tree():
 
     delete(root,"Manolo")
     assert search(root,"Manolo") == False
+    assert depth(root) == 3
