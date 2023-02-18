@@ -23,21 +23,22 @@ def search(tree, node):
     if node < tree.value:
         return search(tree.left, node)
 
-    if  node > tree.value:
+    if node > tree.value:
         return search(tree.right, node)
 
+
 def delete(tree, node):
-    #if tree is None:
+    # if tree is None:
     #    raise ValueError(f'Not found {node}')
 
-    #if tree.value == node:
+    # if tree.value == node:
     #    #return True
     #    tree.parent
     #    del tree
 
     if node < tree.value:
         if tree.left is None:
-            raise ValueError(f'Not found {node}')
+            raise ValueError(f"Not found {node}")
         if tree.left.value == node:
             if tree.left.left:
                 tree.left = tree.left.left
@@ -49,7 +50,7 @@ def delete(tree, node):
 
     if node > tree.value:
         if tree.right is None:
-            raise ValueError(f'Not found {node}')
+            raise ValueError(f"Not found {node}")
         if tree.right.value == node:
             if tree.right.left:
                 tree.right = tree.right.left
@@ -60,7 +61,8 @@ def delete(tree, node):
         return delete(tree.right, node)
     assert False
 
-def insert(tree,node:str):
+
+def insert(tree, node: str):
     if node < tree.value:
         if tree.left is None:
             tree.left = Node(node)
@@ -74,10 +76,10 @@ def insert(tree,node:str):
         return insert(tree.right, node)
 
     if node == tree.value:
-        raise ValueError(f'node {node} already exists')
+        raise ValueError(f"node {node} already exists")
 
 
-def insert_node(tree,node:Node):
+def insert_node(tree, node: Node):
     if node.value < tree.value:
         if tree.left is None:
             tree.left = node
@@ -91,7 +93,8 @@ def insert_node(tree,node:Node):
         return insert(tree.right, node)
 
     if node.value == tree.value:
-        raise ValueError(f'node {node} already exists')
+        raise ValueError(f"node {node} already exists")
+
 
 def minimum(tree):
     res = tree.left
@@ -99,11 +102,13 @@ def minimum(tree):
         res = res.left
     return res.value
 
+
 def maximum(tree):
     res = tree.right
     while res.right:
         res = res.right
     return res.value
+
 
 def traverse(tree):
     res = []
@@ -117,12 +122,13 @@ def traverse(tree):
 
     return res
 
+
 def depth(root):
     if root is None:
         return 0
-    max_depth = 1 +max(depth(root.left), depth(root.right))
+    max_depth = 1 + max(depth(root.left), depth(root.right))
     return max_depth
-    
+
 
 def test_tree():
     # https://www.epdata.es/datos/nombres-apellidos-mas-frecuentes-espana-ine/373#:~:text=Antonio%20y%20Mar%C3%ADa%20Carmen%20siguen,son%20Antonio%2C%20Manuel%20y%20Jos%C3%A9.
@@ -134,13 +140,13 @@ def test_tree():
     # ['Alejandro', 'Javier', 'Juan', 'Pedro']
     #        ]
     """
-               ┌ Alejandro
-      ┌─ David ┤
-      │        └─── Javier
- Jose ┤
-      │        ┌───── Juan
-      └ Miguel ┤
-               └──── Pedro
+                  ┌ Alejandro
+         ┌─ David ┤
+         │        └─── Javier
+    Jose ┤
+         │        ┌───── Juan
+         └ Miguel ┤
+                  └──── Pedro
     """
     jose = Node("Jose")
     david = Node("David")
@@ -163,13 +169,22 @@ def test_tree():
     assert search(root, "Javier") == True
     assert search(root, "Manolo") == False
 
-    insert(root,"Manolo")
-    assert search(root,"Manolo") == True
+    insert(root, "Manolo")
+    assert search(root, "Manolo") == True
 
-    assert minimum(root) == 'Alejandro'
-    assert maximum(root) == 'Pedro'
-    assert traverse(root) == ['Alejandro', 'David','Javier', 'Jose','Juan', 'Manolo', 'Miguel', 'Pedro']
+    assert minimum(root) == "Alejandro"
+    assert maximum(root) == "Pedro"
+    assert traverse(root) == [
+        "Alejandro",
+        "David",
+        "Javier",
+        "Jose",
+        "Juan",
+        "Manolo",
+        "Miguel",
+        "Pedro",
+    ]
 
-    delete(root,"Manolo")
-    assert search(root,"Manolo") == False
+    delete(root, "Manolo")
+    assert search(root, "Manolo") == False
     assert depth(root) == 3
