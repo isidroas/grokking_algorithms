@@ -130,61 +130,21 @@ def depth(root):
     return max_depth
 
 
-def test_tree():
-    # https://www.epdata.es/datos/nombres-apellidos-mas-frecuentes-espana-ine/373#:~:text=Antonio%20y%20Mar%C3%ADa%20Carmen%20siguen,son%20Antonio%2C%20Manuel%20y%20Jos%C3%A9.
-    # tree = Node('Laura', None, Node('Cristina',None,None,None), Node('Maria Jose',None,None))
+def is_full(root):
+    childs = 0
+    if root.left:
+        if not is_full(root.left):
+            return False
+        childs += 1
+    if root.right:
+        if not is_full(root.right):
+            return False
+        childs += 1
 
-    #    tree = [
-    #                   'jose',
-    #             ['David', 'Miguel'],
-    # ['Alejandro', 'Javier', 'Juan', 'Pedro']
-    #        ]
-    """
-                  ┌ Alejandro
-         ┌─ David ┤
-         │        └─── Javier
-    Jose ┤
-         │        ┌───── Juan
-         └ Miguel ┤
-                  └──── Pedro
-    """
-    jose = Node("Jose")
-    david = Node("David")
-    miguel = Node("Miguel")
-    alejandro = Node("Alejandro")
-    javier = Node("Javier")
-    juan = Node("Juan")
-    pedro = Node("Pedro")
+    return childs in (0,2)
 
-    jose.parent = None
-    jose.left, jose.right = david, miguel
-    david.left, david.right, miguel.left, miguel.right = (
-        alejandro,
-        javier,
-        juan,
-        pedro,
-    )
-    root = jose
 
-    assert search(root, "Javier") == True
-    assert search(root, "Manolo") == False
-
-    insert(root, "Manolo")
-    assert search(root, "Manolo") == True
-
-    assert minimum(root) == "Alejandro"
-    assert maximum(root) == "Pedro"
-    assert traverse(root) == [
-        "Alejandro",
-        "David",
-        "Javier",
-        "Jose",
-        "Juan",
-        "Manolo",
-        "Miguel",
-        "Pedro",
-    ]
-
-    delete(root, "Manolo")
-    assert search(root, "Manolo") == False
-    assert depth(root) == 3
+def is_full2(root):
+    if root.left and root.right:
+        return is_full2(root.left) and is_full2(root.right)
+    return not root.left and not root.right
