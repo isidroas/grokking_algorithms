@@ -1,3 +1,6 @@
+"""
+https://en.wikipedia.org/wiki/Tree_structure#Representing_trees
+"""
 def list_of_lists():
     return [[1,2],[3,4]]
 
@@ -47,4 +50,13 @@ def test(list_):
   │    ┌─ 3
   └─ * ┤
        └─ 4\
+"""
+
+def test(list_):
+    assert pformat(list_) == r"""\
+     *
+   ┌─┴─┐
+   *   *
+  ┌┴┐ ┌┴┐
+  1 2 3 4\
 """

@@ -26,6 +26,11 @@ def search(tree, node):
     if node > tree.value:
         return search(tree.right, node)
 
+def search_loop(tree, value):
+    node = tree
+    while node is not None and node.value != value:
+        node = node.left if value < node.value else  node.right
+    return node
 
 def delete(tree, node):
     # if tree is None:

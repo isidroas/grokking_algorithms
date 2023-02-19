@@ -44,6 +44,10 @@ def test_search(tree_of_names):
     assert search(tree_of_names, "Javier") == True
     assert search(tree_of_names, "Manolo") == False
 
+def test_search_loop(tree_of_names):
+    assert search_loop(tree_of_names, "Javier").value == "Javier"
+    assert search_loop(tree_of_names, "Manolo") == None
+
 def test_insert(tree_of_names):
     insert(tree_of_names, "Manolo")
     assert search(tree_of_names, "Manolo") == True
