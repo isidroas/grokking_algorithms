@@ -160,6 +160,8 @@ def test_delete2_is_right(tree_of_numbers):
     assert search(tree_of_numbers, 12) == True
     delete2(tree_of_numbers, 12)
     assert search(tree_of_numbers,12) == False
+    assert search(tree_of_numbers, 13) == True
+    assert search(tree_of_numbers, 15) == True
 
 def test_delete2_is_left(tree_of_numbers):
     assert search(tree_of_numbers, 4) == True

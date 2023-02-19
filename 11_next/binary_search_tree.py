@@ -231,7 +231,7 @@ def delete2(tree, value ):
         #sucessor = traverse(node.right)[0]
         sucessor.parent = None
         if node.is_right:
-            node.parent.right = sucessor
+            node.parent.right.value = sucessor.value
         else: # is left
-            node.parent.left = sucessor
+            node.parent.left.value = sucessor.value
     del node
