@@ -12,6 +12,13 @@ class Node:
     left: "Node" = None
     right: "Node" = None
 
+    @property
+    def is_right(self):
+        assert self.parent is not None
+        return self.parent.right == self
+    def __eq__(self, other):
+        return self.value == other.value
+
 
 def search(tree, node):
     if tree is None:
@@ -83,6 +90,26 @@ def insert(tree, node: str):
     if node == tree.value:
         raise ValueError(f"node {node} already exists")
 
+def insert_loop(tree, value):
+    node = tree
+    while True:
+
+        if value < node.value:
+            if node.left is None:
+                node.left = Node(value)
+                break
+            node= node.left
+            continue
+
+        if value > node.value:
+            if node.right is None:
+                node.right = Node(value)
+                break
+            node = node.right
+            continue
+
+        if value == node.value:
+            raise ValueError(f"value {value} already exists")
 
 def insert_node(tree, node: Node):
     if node.value < tree.value:
@@ -126,6 +153,14 @@ def traverse(tree):
     res.extend(traverse(tree.right))
 
     return res
+def traverse_nodes(tree):
+
+
+    if tree.left is not None:
+        yield from traverse_nodes(tree.left)
+    yield tree
+    if tree.right is not None:
+        yield from traverse_nodes(tree.right)
 
 
 def depth(root):
@@ -153,3 +188,50 @@ def is_full2(root):
     if root.left and root.right:
         return is_full2(root.left) and is_full2(root.right)
     return not root.left and not root.right
+
+def nodes_from_dict(dict_):
+    keys = list(dict_.keys())
+    assert len(keys) == 1
+    value = keys[0]
+    childs = dict_[value]
+    if len(childs) == 2:
+        node = Node(value, left=nodes_from_dict(childs[0]), right=nodes_from_dict(childs[1]))
+    else:
+        assert len(childs)==0
+        node = Node(value)
+    return node
+
+def delete2(tree, value ):
+    node = tree
+    while node.value != value:
+        aux = node.left if value < node.value else node.right
+        if aux is None:
+            raise ValueError(f'Not found {value}')
+        aux.parent = node
+        node = aux
+
+
+    if node.left is None and node.right is None:
+        if node.is_right:
+            node.parent.right = None
+        else: # is left
+            node.parent.left = None
+    elif node.right is None:
+        if node.is_right:
+            node.parent.right = node.left
+        else: # is left
+            node.parent.left = node.left
+    elif node.left is None:
+        if node.is_right:
+            node.parent.right = node.right
+        else: # is left
+            node.parent.left = node.right
+    else:
+        sucessor = next(traverse_nodes(node.right))
+        #sucessor = traverse(node.right)[0]
+        sucessor.parent = None
+        if node.is_right:
+            node.parent.right = sucessor
+        else: # is left
+            node.parent.left = sucessor
+    del node
